@@ -71,7 +71,7 @@ export default function( WrappedComponent ) {
 		}
 
 		render() {
-			return <WrappedComponent moment={ moment } { ...this.props } />;
+			return <WrappedComponent { ...this.props } moment={ moment } />;
 		}
 	}
 
