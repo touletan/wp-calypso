@@ -48,6 +48,10 @@ jobs:
             - ~/.npm
 
       - run:
+          name: Danger
+          command: npm run danger ci
+
+      - run:
           name: Build calypso-strings.pot
           command: |
             if [ "$CIRCLE_NODE_INDEX" == "0" ]; then
