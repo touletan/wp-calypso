@@ -22,6 +22,7 @@ import {
 	split,
 } from 'lodash';
 import bodyParser from 'body-parser';
+import superagent from 'superagent';
 
 /**
  * Internal dependencies
@@ -40,7 +41,6 @@ import { login } from 'lib/paths';
 import { logSectionResponseTime } from './analytics';
 import { setCurrentUserOnReduxStore } from 'lib/redux-helpers';
 import analytics from '../lib/analytics';
-import { fetchLangRevisions } from 'i18n-bootstrap';
 import { getLanguage, setLangRevisions } from 'lib/i18n-utils';
 
 const debug = debugFactory( 'calypso:pages' );
@@ -301,6 +301,25 @@ function setUpLoggedInRoute( req, res, next ) {
 		'X-Frame-Options': 'SAMEORIGIN',
 	} );
 
+	const LANG_REVISION_FILE_URL = 'https://widgets.wp.com/languages/calypso/lang-revisions.json';
+	const langPromise = superagent
+		.get( LANG_REVISION_FILE_URL )
+		.then( response => {
+			const langRevisions = response.body;
+
+			req.context.langRevisions = langRevisions;
+			setLangRevisions( langRevisions );
+
+			return langRevisions;
+		} )
+		.catch( error => {
+			console.error( 'Failed to fetch the language revision files.', error );
+
+			return error;
+		} );
+
+	const setupRequests = [ langPromise ];
+
 	if ( config.isEnabled( 'wpcom-user-bootstrap' ) ) {
 		const geoCountry = req.get( 'x-geoip-country-code' ) || '';
 		const protocol = req.get( 'X-Forwarded-Proto' ) === 'https' ? 'https' : 'http';
@@ -323,19 +342,6 @@ function setUpLoggedInRoute( req, res, next ) {
 		start = new Date().getTime();
 
 		debug( 'Issuing API call to fetch user object' );
-
-		const langPromise = fetchLangRevisions()
-			.then( langRevisions => {
-				req.context.langRevisions = langRevisions;
-				setLangRevisions( langRevisions );
-
-				return langRevisions;
-			} )
-			.catch( error => {
-				console.error( 'Failed to fetch the language revision files.', error );
-
-				return error;
-			} );
 
 		const userPromise = user( req.cookies.wordpress_logged_in, geoCountry )
 			.then( data => {
@@ -405,29 +411,18 @@ function setUpLoggedInRoute( req, res, next ) {
 				return error;
 			} );
 
-		Promise.all( [ langPromise, userPromise ] ).then( results => {
-			const rejectedWithErrors = results.filter( r => null != r && r.error );
-
-			if ( 0 !== rejectedWithErrors.length ) {
-				return next( rejectedWithErrors );
-			}
-
-			next();
-		} );
-	} else {
-		fetchLangRevisions()
-			.then( langRevisions => {
-				req.context.langRevisions = langRevisions;
-				setLangRevisions( langRevisions );
-
-				next();
-			} )
-			.catch( error => {
-				console.error( 'Failed to fetch the language revision files.', error );
-
-				next( error );
-			} );
+		setupRequests.push( userPromise );
 	}
+
+	Promise.all( setupRequests ).then( results => {
+		const rejectedWithErrors = results.filter( r => null != r && r.error );
+
+		if ( 0 !== rejectedWithErrors.length ) {
+			return next( rejectedWithErrors );
+		}
+
+		next();
+	} );
 }
 
 /**
