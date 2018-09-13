@@ -41,7 +41,7 @@ import { login } from 'lib/paths';
 import { logSectionResponseTime } from './analytics';
 import { setCurrentUserOnReduxStore } from 'lib/redux-helpers';
 import analytics from '../lib/analytics';
-import { getLanguage, setLangRevisions } from 'lib/i18n-utils';
+import { getLanguage } from 'lib/i18n-utils';
 
 const debug = debugFactory( 'calypso:pages' );
 
@@ -305,12 +305,11 @@ function setUpLoggedInRoute( req, res, next ) {
 	const langPromise = superagent
 		.get( LANG_REVISION_FILE_URL )
 		.then( response => {
-			const langRevisions = response.body;
+			const languageRevisions = response.body;
 
-			req.context.langRevisions = langRevisions;
-			setLangRevisions( langRevisions );
+			req.context.languageRevisions = languageRevisions;
 
-			return langRevisions;
+			return languageRevisions;
 		} )
 		.catch( error => {
 			console.error( 'Failed to fetch the language revision files.', error );
