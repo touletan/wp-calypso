@@ -67,6 +67,7 @@ class ImportURLStepComponent extends Component {
 		const { urlInputValue } = this.props;
 		SignupActions.submitSignupStep( { stepName: this.props.stepName }, [], {
 			importUrl: urlInputValue,
+			importFromService: 'wix', // @TODO pull this out of the siteDetails
 			themeSlugWithRepo: 'pub/radcliffe-2',
 		} );
 

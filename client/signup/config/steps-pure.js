@@ -358,7 +358,7 @@ export function generateSteps( {
 
 		'import-from-url': {
 			stepName: 'import-from-url',
-			providesDependencies: [ 'importUrl', 'themeSlugWithRepo' ],
+			providesDependencies: [ 'importFromService', 'importUrl', 'themeSlugWithRepo' ],
 		},
 
 		'reader-landing': {
