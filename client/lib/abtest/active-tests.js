@@ -133,4 +133,13 @@ export default {
 		},
 		defaultVariation: 'justSearch',
 	},
+	userFirstSignup: {
+		datestamp: '20180913',
+		variations: {
+			default: 1,
+			userFirst: 1,
+		},
+		defaultVariation: 'default',
+		allowExistingUsers: false,
+	},
 };
