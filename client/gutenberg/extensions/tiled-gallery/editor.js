@@ -9,7 +9,6 @@ import { createBlock, registerBlockType } from '@wordpress/blocks';
 /**
  * Internal dependencies
  */
-import './style.scss';
 import TiledGalleryEdit from './edit.jsx';
 import TiledGallerySave from './save.jsx';
 
@@ -19,20 +18,20 @@ const blockSettings = {
 	title: __( 'Tiled Gallery' ),
 	description: __( 'Display multiple images in an elegantly organized tiled layout.' ),
 	icon: 'format-gallery',
-	category: 'layout',
+	category: 'jetpack',
 	keywords: [ __( 'images' ), __( 'photos' ) ],
 	attributes: {
 		columns: {
 			type: 'integer',
-			'default': 3,
+			default: 3,
 		},
 		linkTo: {
 			type: 'string',
-			'default': 'none',
+			default: 'none',
 		},
 		images: {
 			type: 'array',
-			'default': [],
+			default: [],
 			source: 'query',
 			selector: '.tiled-gallery-item',
 			query: {
@@ -60,7 +59,7 @@ const blockSettings = {
 					source: 'attribute',
 					selector: 'img',
 					attribute: 'alt',
-					'default': '',
+					default: '',
 				},
 				id: {
 					source: 'attribute',
@@ -97,7 +96,7 @@ const blockSettings = {
 		],
 	},
 	edit: TiledGalleryEdit,
-	save: TiledGallerySave
+	save: TiledGallerySave,
 };
 
 registerBlockType( blockType, blockSettings );
