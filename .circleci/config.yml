@@ -94,6 +94,13 @@ jobs:
             find . -type f -regex  ".*/test-results.*\.xml" -exec cp {} $CIRCLE_TEST_REPORTS/ \;
           when: always
 
+      - run:
+          name: Build Notifications Panel
+          command: |
+            if [ "$CIRCLE_NODE_INDEX" == "0" ]; then
+                NODE_ENV=production npm run sdk -- notifications --output-dir=$CIRCLE_ARTIFACTS/notifications-panel
+            fi
+
       - store_test_results:
           path: /tmp/test_results
       - store_artifacts:
