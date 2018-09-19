@@ -20,6 +20,7 @@ import { requestGutenbergDraftPost as createAutoDraft, requestSitePost } from 's
 import { getHttpData } from 'state/data-layer/http-data';
 import { getSiteSlug } from 'state/sites/selectors';
 import { WithAPIMiddleware } from './api-middleware/utils';
+import 'gutenberg/extensions/presets/jetpack/editor';
 
 const editorSettings = {};
 
