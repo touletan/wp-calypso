@@ -175,6 +175,7 @@ class SiteSettingsImport extends Component {
 					<ImporterComponent
 						key={ type + idx }
 						site={ importItem.site }
+						fromSite={ this.props.fromSite }
 						importerStatus={ importItem }
 					/>
 				) );
