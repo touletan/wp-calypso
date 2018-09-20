@@ -123,6 +123,10 @@ class ImportingPane extends React.PureComponent {
 		);
 	};
 
+	getHeadingTextProcessing = () => {
+		return translate( 'Processing your file. It might take a while, please wait.' );
+	};
+
 	getSuccessText = () => {
 		const {
 				site: { slug },
@@ -189,6 +193,10 @@ class ImportingPane extends React.PureComponent {
 		return this.isInState( appStates.IMPORTING );
 	};
 
+	isProcessing = () => {
+		return this.isInState( appStates.UPLOAD_PROCESSING );
+	};
+
 	isInState = state => {
 		return state === this.props.importerStatus.importerState;
 	};
@@ -199,7 +207,7 @@ class ImportingPane extends React.PureComponent {
 
 	render() {
 		const {
-			importerStatus: { importerId, errorData = {}, customData },
+			importerStatus: { importerId, /*errorData = {},*/ customData },
 			mapAuthorFor,
 			site: { ID: siteId, name: siteName, single_user_site: hasSingleAuthor },
 			sourceType,
@@ -213,7 +221,8 @@ class ImportingPane extends React.PureComponent {
 		let blockingMessage;
 
 		if ( this.isError() ) {
-			statusMessage = this.getErrorMessage( errorData );
+			//statusMessage = this.getErrorMessage( errorData );
+			statusMessage = '';
 		}
 
 		if ( this.isFinished() ) {
@@ -230,6 +239,7 @@ class ImportingPane extends React.PureComponent {
 		return (
 			<div className="importer__importing-pane">
 				{ this.isImporting() && <p>{ this.getHeadingText() }</p> }
+				{ this.isProcessing() && <p>{ this.getHeadingTextProcessing() }</p> }
 				{ this.isMapping() && (
 					<AuthorMappingPane
 						hasSingleAuthor={ hasSingleAuthor }
@@ -242,7 +252,7 @@ class ImportingPane extends React.PureComponent {
 						targetTitle={ siteName }
 					/>
 				) }
-				{ this.isImporting() &&
+				{ ( this.isImporting() || this.isProcessing() ) &&
 					( percentComplete >= 0 ? (
 						<ProgressBar className={ progressClasses } value={ percentComplete } />
 					) : (
