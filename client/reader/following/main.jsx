@@ -6,6 +6,7 @@ import React from 'react';
 import { localize } from 'i18n-calypso';
 import page from 'page';
 import { initial, flatMap, trim } from 'lodash';
+import Muriel from 'muriel-base-components';
 
 /**
  * Internal dependencies
@@ -53,15 +54,17 @@ const FollowingStream = props => {
 					placeholder={ placeholderText }
 				/>
 			</CompactCard>
-			<div className="search-stream__blank-suggestions">
-				{ suggestionList &&
-					props.translate( 'Suggestions: {{suggestions /}}.', {
-						components: {
-							suggestions: suggestionList,
-						},
-					} ) }
-				&nbsp;
-			</div>
+			<Muriel>
+				<div className="search-stream__blank-suggestions">
+					{ suggestionList &&
+						props.translate( 'Suggestions: {{suggestions /}}.', {
+							components: {
+								suggestions: suggestionList,
+							},
+						} ) }
+					&nbsp;
+				</div>
+			</Muriel>
 		</Stream>
 	);
 	/* eslint-enable wpcalypso/jsx-classname-namespace */
