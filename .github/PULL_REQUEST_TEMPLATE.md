@@ -1,8 +1,8 @@
-#### Changes proposed in this Pull Request:
+#### Changes proposed in this Pull Request
 
 *
 
-#### Testing instructions:
+#### Testing instructions
 
 <!--
 Add as many details as possible to help others reproduce the issue and test the fix.
