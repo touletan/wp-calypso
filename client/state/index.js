@@ -198,7 +198,19 @@ const reducers = {
 if ( config.isEnabled( 'memberships' ) ) {
 	reducers.memberships = memberships;
 }
-export const reducer = combineReducers( reducers );
+export let reducer = combineReducers( reducers );
+
+const addReducerEnhancer = nextCreator => ( initialReducer, initialState ) => {
+	const nextStore = nextCreator( initialReducer, initialState );
+
+	let currentReducer = initialReducer;
+	function addReducer( keys, subReducer ) {
+		currentReducer = reducer = currentReducer.addReducer( keys, subReducer );
+		this.replaceReducer( currentReducer );
+	}
+
+	return Object.assign( {}, nextStore, { addReducer } );
+};
 
 /**
  * @typedef {Object} ReduxStore
@@ -239,6 +251,7 @@ export function createReduxStore( initialState = {} ) {
 	].filter( Boolean );
 
 	const enhancers = [
+		addReducerEnhancer,
 		isBrowser && window.app && window.app.isDebug && consoleDispatcher,
 		httpDataEnhancer,
 		applyMiddleware( ...middlewares ),
