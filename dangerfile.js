@@ -31,7 +31,7 @@ if ( ! ghLabels.find( l => l.name.toLowerCase().includes( '[status]' ) ) ) {
 }
 
 // Test instructions
-if ( ! danger.github.pr.body.includes( 'Testing instructions' ) ) {
+if ( ! danger.github.pr.body.toLowerCase().includes( 'testing' ) ) {
 	warn( '"Testing instructions" are missing for this PR. Please add some.' );
 }
 
