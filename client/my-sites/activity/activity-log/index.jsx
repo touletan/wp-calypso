@@ -491,9 +491,7 @@ class ActivityLog extends Component {
 			return null;
 		}
 
-		return (
-			config.isEnabled( 'activity-filterbar' ) && <Filterbar siteId={ siteId } filter={ filter } />
-		);
+		return <Filterbar siteId={ siteId } filter={ filter } />;
 	}
 
 	render() {
