@@ -12,6 +12,7 @@ import {
 	getAllSelectedPackages,
 	getCurrentlyEditingPredefinedPackages,
 	getPredefinedPackagesChangesSummary,
+	getPackageGroupsForLabelPurchase,
 } from '../selectors';
 import initialPackagesState from './data/initial-state';
 
@@ -39,9 +40,14 @@ describe( 'Packages selectors', () => {
 		expect( result ).to.eql( [
 			{ index: 0, name: '1' },
 			{ index: 1, name: '2' },
-			{ id: 'box1', name: 'aBox', serviceId: 'service' },
-			{ id: 'box', name: 'bBox', serviceId: 'service' },
-			{ id: 'envelope', name: 'envelope', serviceId: 'otherService' },
+			{ id: 'box1', name: 'aBox', serviceId: 'service', can_ship_international: false },
+			{ id: 'box', name: 'bBox', serviceId: 'service', can_ship_international: true },
+			{
+				id: 'envelope',
+				name: 'envelope',
+				serviceId: 'otherService',
+				can_ship_international: false,
+			},
 			{ index: 2, name: 'zBox' },
 		] );
 	} );
@@ -72,9 +78,14 @@ describe( 'Packages selectors', () => {
 
 		const result = getAllSelectedPackages( state, siteId );
 		expect( result ).to.eql( [
-			{ id: 'box1', name: 'aBox', serviceId: 'service' },
-			{ id: 'box', name: 'bBox', serviceId: 'service' },
-			{ id: 'envelope', name: 'envelope', serviceId: 'otherService' },
+			{ id: 'box1', name: 'aBox', serviceId: 'service', can_ship_international: false },
+			{ id: 'box', name: 'bBox', serviceId: 'service', can_ship_international: true },
+			{
+				id: 'envelope',
+				name: 'envelope',
+				serviceId: 'otherService',
+				can_ship_international: false,
+			},
 		] );
 	} );
 
@@ -98,18 +109,21 @@ describe( 'Packages selectors', () => {
 						name: 'bBox',
 						selected: true,
 						serviceId: 'service',
+						can_ship_international: true,
 					},
 					{
 						id: 'box1',
 						name: 'aBox',
 						selected: true,
 						serviceId: 'service',
+						can_ship_international: false,
 					},
 					{
 						id: 'box2',
 						name: 'cBox',
 						selected: false,
 						serviceId: 'service',
+						can_ship_international: true,
 					},
 				],
 			},
@@ -125,6 +139,7 @@ describe( 'Packages selectors', () => {
 						name: 'envelope',
 						selected: true,
 						serviceId: 'otherService',
+						can_ship_international: false,
 					},
 				],
 			},
@@ -187,6 +202,55 @@ describe( 'Packages selectors', () => {
 		expect( result ).to.eql( {
 			added: 1,
 			removed: 3,
+		} );
+	} );
+
+	describe( 'getPackageGroupsForLabelPurchase()', () => {
+		test( 'the package list for international orders should use	 only packages that can be shipped internationally, and only the groups that contains those packages', () => {
+			const state = getState( {
+				...initialPackagesState,
+			} );
+			const isInternationalOrder = true;
+
+			const result = getPackageGroupsForLabelPurchase( state, siteId, isInternationalOrder );
+
+			expect( result ).to.eql( {
+				custom: {
+					title: 'Custom Packages',
+					definitions: [ { name: '1' }, { name: '2' }, { name: 'zBox' } ],
+				},
+				priority: {
+					title: 'Priority',
+					definitions: [ { id: 'box', name: 'bBox', can_ship_international: true } ],
+				},
+			} );
+		} );
+
+		test( 'the package list for domestic orders should use all packages', () => {
+			const state = getState( {
+				...initialPackagesState,
+			} );
+			const isInternationalOrder = false;
+
+			const result = getPackageGroupsForLabelPurchase( state, siteId, isInternationalOrder );
+
+			expect( result ).to.eql( {
+				custom: {
+					title: 'Custom Packages',
+					definitions: [ { name: '1' }, { name: '2' }, { name: 'zBox' } ],
+				},
+				priority: {
+					title: 'Priority',
+					definitions: [
+						{ id: 'box', name: 'bBox', can_ship_international: true },
+						{ id: 'box1', name: 'aBox', can_ship_international: false },
+					],
+				},
+				express: {
+					title: 'Express',
+					definitions: [ { id: 'envelope', name: 'envelope', can_ship_international: false } ],
+				},
+			} );
 		} );
 	} );
 } );

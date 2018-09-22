@@ -89,7 +89,7 @@ export const getAllSelectedPackages = createSelector(
  * @returns {Object} packages grouped by services
  */
 export const getPackageGroupsForLabelPurchase = createSelector(
-	( state, siteId = getSelectedSiteId( state ) ) => {
+	( state, siteId = getSelectedSiteId( state ), isInternationalOrder ) => {
 		const form = getPackagesForm( state, siteId );
 		if ( ! form || ! form.predefinedSchema || ! form.packages ) {
 			return null;
@@ -107,6 +107,10 @@ export const getPackageGroupsForLabelPurchase = createSelector(
 				const resultGroup = { title: group.title, definitions: [] };
 
 				forEach( definitions, pckg => {
+					if ( isInternationalOrder && false === pckg.can_ship_international ) {
+						return;
+					}
+
 					if ( ! pckg.is_flat_rate && ! includes( serviceSelectedIds, pckg.id ) ) {
 						return;
 					}

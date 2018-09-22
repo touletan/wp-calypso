@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { bindActionCreators } from 'redux';
 import { localize } from 'i18n-calypso';
-import { isEmpty, map, some } from 'lodash';
+import { isEmpty, map, some, has } from 'lodash';
 
 /**
  * Internal dependencies
@@ -34,6 +34,8 @@ import {
 	getFormErrors,
 } from 'woocommerce/woocommerce-services/state/shipping-label/selectors';
 import { getPackageGroupsForLabelPurchase } from 'woocommerce/woocommerce-services/state/packages/selectors';
+import getAddressValues from 'woocommerce/woocommerce-services/lib/utils/get-address-values';
+import { ACCEPTED_USPS_ORIGIN_COUNTRIES } from 'woocommerce/woocommerce-services/state/shipping-label/constants';
 
 const renderPackageDimensions = ( dimensions, dimensionUnit ) => {
 	return [ dimensions.length, dimensions.width, dimensions.height ]
@@ -258,13 +260,19 @@ const mapStateToProps = ( state, { orderId, siteId } ) => {
 	const shippingLabel = getShippingLabel( state, orderId, siteId );
 	const storeOptions = loaded ? shippingLabel.storeOptions : {};
 	const errors = loaded && getFormErrors( state, orderId, siteId ).packages;
+	const isInternationalOrder =
+		has( shippingLabel, 'form.destination' ) &&
+		! ACCEPTED_USPS_ORIGIN_COUNTRIES.includes(
+			getAddressValues( shippingLabel.form.destination ).country
+		);
+
 	return {
 		errors,
 		packageId: shippingLabel.openedPackageId,
 		selected: shippingLabel.form.packages.selected,
 		dimensionUnit: storeOptions.dimension_unit,
 		weightUnit: storeOptions.weight_unit,
-		packageGroups: getPackageGroupsForLabelPurchase( state, siteId ),
+		packageGroups: getPackageGroupsForLabelPurchase( state, siteId, isInternationalOrder ),
 	};
 };
 
