@@ -16,5 +16,5 @@ import React from 'react';
  * @returns {React.ReactElement} a rendered Fobber
  */
 export default function Fobber( props ) {
-	return <div className="muriel fobber">{ props.children }</div>;
+	return <div className="muriel frobber">{ props.children }</div>;
 }

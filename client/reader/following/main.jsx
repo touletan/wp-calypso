@@ -6,7 +6,7 @@ import React from 'react';
 import { localize } from 'i18n-calypso';
 import page from 'page';
 import { initial, flatMap, trim } from 'lodash';
-import Muriel from 'muriel-base-components';
+import { Frobber } from 'muriel-base-components';
 
 /**
  * Internal dependencies
@@ -54,7 +54,7 @@ const FollowingStream = props => {
 					placeholder={ placeholderText }
 				/>
 			</CompactCard>
-			<Muriel>
+			<Frobber>
 				<div className="search-stream__blank-suggestions">
 					{ suggestionList &&
 						props.translate( 'Suggestions: {{suggestions /}}.', {
@@ -64,7 +64,7 @@ const FollowingStream = props => {
 						} ) }
 					&nbsp;
 				</div>
-			</Muriel>
+			</Frobber>
 		</Stream>
 	);
 	/* eslint-enable wpcalypso/jsx-classname-namespace */

@@ -1,1 +1,1 @@
-export { default as Fobber } from './fobber';
+export { default as Frobber } from './frobber';
