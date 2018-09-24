@@ -20,15 +20,6 @@ ENV        NODE_PATH=/calypso/server:/calypso/client
 COPY       ./env-config.sh /tmp/env-config.sh
 RUN        bash /tmp/env-config.sh
 
-# Build a "dependencies" layer
-#
-# This layer should include all required npm modules
-# and should only change as often as the dependencies
-# change. This layer should allow for final build times
-# to be limited only by the Calypso build speed.
-COPY       ./package.json ./npm-shrinkwrap.json /calypso/
-RUN        npm ci --only=production
-
 # Build a "source" layer
 #
 # This layer is populated with up-to-date files from
@@ -44,6 +35,7 @@ RUN        npm ci --only=production
 # not trigger additional install as part of the build
 # in the following step.
 COPY       . /calypso/
+RUN        npm ci --only-production
 RUN        touch node_modules
 
 # Build the final layer
