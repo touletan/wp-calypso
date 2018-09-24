@@ -35,7 +35,7 @@ RUN        bash /tmp/env-config.sh
 # not trigger additional install as part of the build
 # in the following step.
 COPY       . /calypso/
-RUN        npm ci --only-production
+RUN        npm ci --only=production
 RUN        touch node_modules
 
 # Build the final layer
