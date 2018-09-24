@@ -6,7 +6,7 @@
 
 import { danger, warn, markdown, results } from 'danger';
 
-// Skip danger check if "no ci" or "no danger" in latest commit
+// Skip danger check if 'no ci' or 'no danger' in latest commit
 const lastCommit = danger.git.commits.slice( -1 )[ 0 ].message;
 if (
 	lastCommit.includes( 'no ci' ) ||
