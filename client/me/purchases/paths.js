@@ -18,7 +18,7 @@ export function billingHistoryReceipt( receiptId ) {
 }
 
 // todo: is a pending order id the samething as a purchase id?
-export function pendingPurchase( siteName, orderId ) {
+export function managePending( siteName, orderId ) {
 	if ( process.env.NODE_ENV !== 'production' ) {
 		if ( 'undefined' === typeof siteName || 'undefined' === typeof orderId ) {
 			throw new Error( 'siteName and orderId must be provided' );
