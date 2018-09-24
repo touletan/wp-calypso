@@ -13,8 +13,9 @@ glob( 'packages/*/package.json', ( err, matches ) => {
 		const inputDir = path.join( dir, 'src' );
 		const outputDir = path.join( dir, 'dist', 'esm' );
 		console.log( `Building ${ dir }...` );
-		execSync( `npx babel -d ${outputDir} ${inputDir}`, {
+		execSync( `node ./node_modules/.bin/babel -d ${outputDir} ${inputDir}`, {
 			env: Object.assign( {}, process.env, { CALYPSO_CLIENT: 'true' } )
 		} );
 	 } );
+	 console.log('Done building packages');
 } );
