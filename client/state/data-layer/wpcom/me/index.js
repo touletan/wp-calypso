@@ -14,7 +14,6 @@ import dismiss from './dismiss';
 import notification from './notification';
 import settings from './settings';
 import sendVerificationEmail from './send-verification-email';
-import siteBlocks from './site-blocks';
 import countries from './transactions/supported-countries';
 import order from './transactions/order';
 import twoStep from './two-step';
@@ -34,8 +33,7 @@ registerHandlers(
 		settings,
 		sendVerificationEmail,
 		twoStep,
-		order,
-		siteBlocks
+		order
 	)
 );
 
