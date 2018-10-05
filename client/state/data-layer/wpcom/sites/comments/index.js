@@ -35,7 +35,7 @@ import { noRetry } from 'state/data-layer/wpcom-http/pipeline/retry-on-failure/p
 
 import { registerHandlers } from 'state/data-layer/handler-registry';
 
-const changeCommentStatus = action => ( dispatch, getState ) => {
+const changeCommentStatus = ( { dispatch, getState }, action ) => {
 	const { siteId, commentId, status } = action;
 	const previousStatus = get(
 		getSiteComment( getState(), action.siteId, action.commentId ),
@@ -60,15 +60,17 @@ const changeCommentStatus = action => ( dispatch, getState ) => {
 	);
 };
 
-export const handleChangeCommentStatusSuccess = ( { commentId, refreshCommentListQuery } ) => {
-	const actions = [ removeNotice( `comment-notice-error-${ commentId }` ) ];
+export const handleChangeCommentStatusSuccess = (
+	{ dispatch },
+	{ commentId, refreshCommentListQuery }
+) => {
+	dispatch( removeNotice( `comment-notice-error-${ commentId }` ) );
 	if ( !! refreshCommentListQuery ) {
-		actions.push( requestCommentsList( refreshCommentListQuery ) );
+		dispatch( requestCommentsList( refreshCommentListQuery ) );
 	}
-	return actions;
 };
 
-const announceStatusChangeFailure = action => dispatch => {
+const announceStatusChangeFailure = ( { dispatch }, action ) => {
 	const { commentId, status } = action;
 	const previousStatus = get( action, 'meta.comment.previousStatus' );
 
@@ -267,11 +269,11 @@ export const announceEditFailure = ( { dispatch }, action ) => {
 
 export const fetchHandler = {
 	[ COMMENTS_CHANGE_STATUS ]: [
-		dispatchRequestEx( {
-			fetch: changeCommentStatus,
-			onSuccess: handleChangeCommentStatusSuccess,
-			onError: announceStatusChangeFailure,
-		} ),
+		dispatchRequest(
+			changeCommentStatus,
+			handleChangeCommentStatusSuccess,
+			announceStatusChangeFailure
+		),
 	],
 	[ COMMENTS_LIST_REQUEST ]: [ dispatchRequest( fetchCommentsList, addComments, announceFailure ) ],
 	[ COMMENT_REQUEST ]: [

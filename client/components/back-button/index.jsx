@@ -13,11 +13,6 @@ import { noop } from 'lodash';
  */
 import Button from 'components/button';
 
-/**
- * Style dependencies
- */
-import './style.scss';
-
 const BackButton = ( { onClick, translate } ) => {
 	return (
 		<div className="back-button">

@@ -7,7 +7,6 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import { Provider as ReduxProvider } from 'react-redux';
 import page from 'page';
-import { startsWith } from 'lodash';
 
 /**
  * Internal Dependencies
@@ -17,29 +16,26 @@ import Layout from 'layout';
 import LayoutLoggedOut from 'layout/logged-out';
 import { login } from 'lib/paths';
 import { makeLayoutMiddleware } from './shared.js';
-import { isUserLoggedIn } from 'state/current-user/selectors';
+import { getCurrentUser } from 'state/current-user/selectors';
 import { getImmediateLoginEmail, getImmediateLoginLocale } from 'state/immediate-login/selectors';
-import { getCurrentRoute } from 'state/selectors/get-current-route';
+import userFactory from 'lib/user';
 
 /**
  * Re-export
  */
 export { setSection, setUpLocale } from './shared.js';
 
-export const ReduxWrappedLayout = ( { store, primary, secondary, redirectUri } ) => {
-	const state = store.getState();
-	const currentRoute = getCurrentRoute( state );
-	const userLoggedIn = isUserLoggedIn( state );
-	let layout = <Layout primary={ primary } secondary={ secondary } />;
+const user = userFactory();
 
-	if ( ! userLoggedIn || startsWith( currentRoute, '/start/user-continue/' ) ) {
-		layout = (
+export const ReduxWrappedLayout = ( { store, primary, secondary, redirectUri } ) => (
+	<ReduxProvider store={ store }>
+		{ getCurrentUser( store.getState() ) ? (
+			<Layout primary={ primary } secondary={ secondary } user={ user } />
+		) : (
 			<LayoutLoggedOut primary={ primary } secondary={ secondary } redirectUri={ redirectUri } />
-		);
-	}
-
-	return <ReduxProvider store={ store }>{ layout }</ReduxProvider>;
-};
+		) }
+	</ReduxProvider>
+);
 
 export const makeLayout = makeLayoutMiddleware( ReduxWrappedLayout );
 
@@ -58,13 +54,13 @@ export const makeLayout = makeLayoutMiddleware( ReduxWrappedLayout );
  * divs.
  */
 export function clientRouter( route, ...middlewares ) {
-	page( route, ...middlewares, hydrate );
+	page( route, ...middlewares, render );
 }
 
 export function redirectLoggedIn( context, next ) {
-	const userLoggedIn = isUserLoggedIn( context.store.getState() );
+	const currentUser = getCurrentUser( context.store.getState() );
 
-	if ( userLoggedIn ) {
+	if ( currentUser ) {
 		page.redirect( '/' );
 		return;
 	}
@@ -74,9 +70,9 @@ export function redirectLoggedIn( context, next ) {
 
 export function redirectLoggedOut( context, next ) {
 	const state = context.store.getState();
-	const userLoggedOut = ! isUserLoggedIn( state );
+	const currentUser = getCurrentUser( state );
 
-	if ( userLoggedOut ) {
+	if ( ! currentUser ) {
 		const loginParameters = {
 			isNative: config.isEnabled( 'login/native-login-links' ),
 			redirectTo: context.path,
@@ -102,8 +98,4 @@ export function redirectLoggedOut( context, next ) {
 
 export function render( context ) {
 	ReactDom.render( context.layout, document.getElementById( 'wpcom' ) );
-}
-
-export function hydrate( context ) {
-	ReactDom.hydrate( context.layout, document.getElementById( 'wpcom' ) );
 }

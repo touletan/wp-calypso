@@ -20,11 +20,6 @@ import SiteSelector from 'components/site-selector';
 import getPrimarySiteId from 'state/selectors/get-primary-site-id';
 import { getCurrentUser } from 'state/current-user/selectors';
 
-/**
- * Style dependencies
- */
-import './style.scss';
-
 export class SitesDropdown extends PureComponent {
 	static propTypes = {
 		selectedSiteId: PropTypes.number,

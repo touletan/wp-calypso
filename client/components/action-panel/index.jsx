@@ -11,11 +11,6 @@ import React from 'react';
  */
 import Card from 'components/card';
 
-/**
- * Style dependencies
- */
-import './style.scss';
-
 const ActionPanel = ( { children } ) => {
 	return <Card className="action-panel">{ children }</Card>;
 };

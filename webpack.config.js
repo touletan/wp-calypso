@@ -285,7 +285,7 @@ function getWebpackConfig( { cssFilename, externalizeWordPressPackages = false }
 						children: true,
 						modules: true,
 						source: false,
-						reasons: true,
+						reasons: false,
 						issuer: false,
 						timings: true,
 					},

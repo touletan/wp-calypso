@@ -38,7 +38,6 @@ const SERVICES_WHITELIST = [
 	'tumblr',
 	'twitter',
 	'google_photos',
-	'mailchimp',
 ];
 
 class SharingServiceExamples extends Component {
@@ -342,18 +341,6 @@ class SharingServiceExamples extends Component {
 						},
 					}
 				),
-			},
-		];
-	}
-
-	mailchimp() {
-		return [
-			{
-				image: {
-					src: '/calypso/images/sharing/mailchimp-screenshot.png',
-					alt: this.props.translate( 'Add subscribers to MailChimp', { textOnly: true } ),
-				},
-				label: this.props.translate( 'Automatically add blog subscribers to your MailChimp list.' ),
 			},
 		];
 	}

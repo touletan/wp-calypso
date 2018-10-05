@@ -6,7 +6,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import ReactDomServer from 'react-dom/server';
 import i18n from 'i18n-calypso';
-import GridiconPencil from 'gridicons/dist/pencil';
+import Gridicon from 'gridicons';
 
 /**
  * Internal dependencies
@@ -71,7 +71,7 @@ export default function( editor ) {
 			this.innerHtml(
 				ReactDomServer.renderToStaticMarkup(
 					<button type="button" role="presentation" tabIndex="-1">
-						<GridiconPencil size={ 18 } />
+						<Gridicon icon="pencil" size={ 18 } />
 					</button>
 				)
 			);

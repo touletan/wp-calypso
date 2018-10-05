@@ -44,11 +44,6 @@ import {
 } from './utils';
 import versionCompare from 'lib/version-compare';
 
-/**
- * Style dependencies
- */
-import './style.scss';
-
 const IOS_REGEX = /iPad|iPod|iPhone/i;
 const ANDROID_REGEX = /Android (\d+(\.\d+)?(\.\d+)?)/i;
 

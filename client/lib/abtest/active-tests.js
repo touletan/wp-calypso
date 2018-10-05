@@ -97,13 +97,13 @@ export default {
 		},
 		defaultVariation: 'justSearch',
 	},
-	domainManagementSuggestionV2: {
-		datestamp: '20181001',
+	domainManagementSuggestion: {
+		datestamp: '20180918',
 		variations: {
-			domainsbot_front: 80,
-			variation_front: 20,
+			domainsbot: 80,
+			group_7: 20,
 		},
-		defaultVariation: 'domainsbot_front',
+		defaultVariation: 'domainsbot',
 		assignmentMethod: 'userId',
 		allowExistingUsers: true,
 	},

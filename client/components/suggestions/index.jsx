@@ -13,11 +13,6 @@ import { findIndex, isEqual, map } from 'lodash';
  */
 import Item from './item';
 
-/**
- * Style depenedencies
- */
-import './style.scss';
-
 class Suggestions extends Component {
 	static propTypes = {
 		query: PropTypes.string,

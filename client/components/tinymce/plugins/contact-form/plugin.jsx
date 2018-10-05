@@ -9,7 +9,7 @@ import i18n from 'i18n-calypso';
 import React, { createElement } from 'react';
 import { unmountComponentAtNode } from 'react-dom';
 import { renderToStaticMarkup } from 'react-dom/server';
-import GridiconMention from 'gridicons/dist/mention';
+import Gridicon from 'gridicons';
 
 /**
  * Internal Dependencies
@@ -101,7 +101,7 @@ const wpcomContactForm = editor => {
 			this.innerHtml(
 				renderToStaticMarkup(
 					<button type="button" role="presentation">
-						<GridiconMention />
+						<Gridicon icon="mention" />
 					</button>
 				)
 			);

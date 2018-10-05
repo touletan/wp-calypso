@@ -70,7 +70,6 @@ import jitm from './jitm/reducer';
 import login from './login/reducer';
 import media from './media/reducer';
 import memberships from './memberships/reducer';
-import mailchimp from './mailchimp/reducer';
 import notices from './notices/reducer';
 import { unseenCount as notificationsUnseenCount } from './notifications';
 import npsSurvey from './nps-survey/reducer';
@@ -209,10 +208,6 @@ const reducers = {
 if ( config.isEnabled( 'memberships' ) ) {
 	reducers.memberships = memberships;
 }
-if ( config.isEnabled( 'mailchimp' ) ) {
-	reducers.mailchimp = mailchimp;
-}
-
 export const reducer = combineReducers( reducers );
 
 /**

@@ -8,11 +8,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Gridicon from 'gridicons';
 
-/**
- * Style dependencies
- */
-import './style.scss';
-
 export default class Rating extends React.PureComponent {
 	static defaultProps = {
 		rating: 0,

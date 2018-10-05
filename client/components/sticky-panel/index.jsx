@@ -16,11 +16,6 @@ import afterLayoutFlush from 'lib/after-layout-flush';
  */
 import { isMobile } from 'lib/viewport';
 
-/**
- * Style dependencies
- */
-import './style.scss';
-
 export default class extends React.Component {
 	static displayName = 'StickyPanel';
 

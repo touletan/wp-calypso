@@ -28,7 +28,6 @@ const compactStates = [ appStates.DISABLED, appStates.INACTIVE ],
 		appStates.IMPORT_SUCCESS,
 		appStates.IMPORTING,
 		appStates.MAP_AUTHORS,
-		appStates.UPLOAD_PROCESSING,
 	],
 	uploadingStates = [
 		appStates.READY_FOR_UPLOAD,
