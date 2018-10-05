@@ -4,7 +4,6 @@
  * External dependencies
  */
 
-import { property, sortBy } from 'lodash';
 import React from 'react';
 import createReactClass from 'create-react-class';
 import { connect } from 'react-redux';
@@ -15,7 +14,6 @@ import classnames from 'classnames';
  */
 import AsyncLoad from 'components/async-load';
 import MasterbarLoggedIn from 'layout/masterbar/logged-in';
-import MasterbarLoggedOut from 'layout/masterbar/logged-out';
 /* eslint-disable no-restricted-imports */
 import observe from 'lib/mixins/data-observe';
 /* eslint-enable no-restricted-imports */
@@ -61,7 +59,6 @@ const Layout = createReactClass( {
 	propTypes: {
 		primary: PropTypes.element,
 		secondary: PropTypes.element,
-		user: PropTypes.object,
 		focus: PropTypes.object,
 		// connected props
 		masterbarIsHidden: PropTypes.bool,
@@ -70,25 +67,6 @@ const Layout = createReactClass( {
 		section: PropTypes.oneOfType( [ PropTypes.bool, PropTypes.object ] ),
 		isOffline: PropTypes.bool,
 		colorSchemePreference: PropTypes.string,
-	},
-
-	newestSite: function() {
-		return sortBy( this.props.sites, property( 'ID' ) ).pop();
-	},
-
-	renderMasterbar: function() {
-		if ( ! this.props.user || /^\/start\/user-continue\//.test( this.props.currentRoute ) ) {
-			return <MasterbarLoggedOut sectionName={ this.props.section.name } />;
-		}
-
-		return (
-			<MasterbarLoggedIn
-				user={ this.props.user }
-				section={ this.props.section.group }
-				sites={ this.props.sites }
-				compact={ this.props.section.name === 'checkout' }
-			/>
-		);
 	},
 
 	renderPreview() {
@@ -124,10 +102,13 @@ const Layout = createReactClass( {
 				<AsyncLoad require="layout/guided-tours" placeholder={ null } />
 				{ config.isEnabled( 'nps-survey/notice' ) && ! isE2ETest() && <NpsSurveyNotice /> }
 				{ config.isEnabled( 'keyboard-shortcuts' ) ? <KeyboardShortcutsMenu /> : null }
-				{ this.renderMasterbar() }
+				<MasterbarLoggedIn
+					section={ this.props.section.group }
+					compact={ this.props.section.name === 'checkout' }
+				/>
 				{ config.isEnabled( 'support-user' ) && <SupportUser /> }
 				<div className={ loadingClass }>
-					<PulsingDot active={ this.props.isLoading } />
+					{ this.props.isLoading && <PulsingDot delay={ 400 } active /> }
 				</div>
 				{ this.props.isOffline && <OfflineStatus /> }
 				<div id="content" className="layout__content">
